@@ -1,6 +1,6 @@
-import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 
-export const useStyles = makeStyles((theme) => ({
+const cssClasses = {
   root: {
     height: "100vh",
     display: "flex",
@@ -74,4 +74,19 @@ export const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
   },
   column: { flexDirection: "column" },
-}));
+};
+
+const classes = {};
+for (const key in cssClasses) {
+  classes["." + key] = cssClasses[key];
+}
+
+const styles = {};
+
+for (const key in cssClasses) {
+  styles[key] = key;
+}
+
+const Root = styled("div")(({ theme }) => classes);
+
+export { styles, Root };

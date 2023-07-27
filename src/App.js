@@ -6,6 +6,9 @@ import {
   createTheme,
 } from "@mui/material";
 import HomeScreen from "./screens/HomeScreen";
+import ChooseScreen from "./screens/ChooseScreen";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Root } from "./styles";
 
 const theme = createTheme({
   typography: {
@@ -30,16 +33,21 @@ const theme = createTheme({
 });
 function App() {
   return (
-    <div className="App">
+    <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Container maxWidth="sm">
           <Paper>
-            <HomeScreen></HomeScreen>
+            <Root>
+              <Routes>
+                <Route path="/choose" element={<ChooseScreen />} />
+                <Route path="/" element={<HomeScreen />} />
+              </Routes>
+            </Root>
           </Paper>
         </Container>
       </ThemeProvider>
-    </div>
+    </BrowserRouter>
   );
 }
 
