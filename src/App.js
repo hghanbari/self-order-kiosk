@@ -11,6 +11,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Root } from "./styles";
 import OrderScreen from "./screens/OrderScreen";
 import ReviewScreen from "./screens/ReviewScreen";
+import SelectPaymentScreen from "./screens/SelectPaymentScreen";
+import PaymentScreen from "./screens/PaymentScreen";
 
 const theme = createTheme({
   typography: {
@@ -42,6 +44,11 @@ function App() {
           <Root>
             <Paper>
               <Routes>
+                <Route path="/payment" element={<PaymentScreen />} />
+                <Route
+                  path="/select-payment"
+                  element={<SelectPaymentScreen />}
+                />
                 <Route path="/review" element={<ReviewScreen />} />
                 <Route path="/order" element={<OrderScreen />} />
                 <Route path="/choose" element={<ChooseScreen />} />
