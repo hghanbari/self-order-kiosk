@@ -11,7 +11,7 @@ import React, { useContext } from "react";
 import Logo from "../component/Logo";
 import { styles } from "../styles";
 import { Store } from "../Store";
-import { setOrderType } from "../action";
+import { setOrderType } from "../actions";
 import { useNavigate } from "react-router-dom";
 
 export default function ChooseScreen() {

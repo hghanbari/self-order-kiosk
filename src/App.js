@@ -38,15 +38,15 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Container maxWidth="sm">
-          <Paper>
-            <Root>
+          <Root>
+            <Paper>
               <Routes>
                 <Route path="/order" element={<OrderScreen />} />
                 <Route path="/choose" element={<ChooseScreen />} />
                 <Route path="/" element={<HomeScreen />} />
               </Routes>
-            </Root>
-          </Paper>
+            </Paper>
+          </Root>
         </Container>
       </ThemeProvider>
     </BrowserRouter>

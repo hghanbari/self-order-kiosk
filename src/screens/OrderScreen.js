@@ -1,26 +1,62 @@
-import React, { useEffect, useContext, useState } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import React, { useContext, useEffect, useState } from "react";
+import Logo from "../component/Logo";
+import { Store } from "../Store";
+import { styles } from "../styles";
+import { useNavigate } from "react-router-dom";
 import {
-  Alert,
+  addToOrder,
+  clearOrder,
+  listCategories,
+  listProducts,
+  removeFromOrder,
+} from "../actions";
+import {
   Avatar,
+  Alert,
   Box,
+  Button,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
   CircularProgress,
+  Dialog,
+  DialogTitle,
   Grid,
   List,
   ListItem,
+  TextField,
   Typography,
 } from "@mui/material";
 
-import Logo from "../component/Logo";
-import { styles } from "../styles";
-import { listCategories, listProducts } from "../action";
-import { Store } from "../Store";
-
-export default function OrderScreen() {
+export default function OrderScreen(props) {
   const [categoryName, setCategoryName] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [isOpen, setIsOpen] = useState(false);
+  const [product, setProduct] = useState({});
+
+  const navigate = useNavigate();
+
+  const closeHandler = () => {
+    setIsOpen(false);
+  };
+
+  const productClickHandler = (p) => {
+    setProduct(p);
+    setIsOpen(true);
+  };
+
+  const addToOrderHandler = () => {
+    addToOrder(dispatch, { ...product, quantity });
+    setIsOpen(false);
+  };
+  const cancelOrRemoveFromOrder = () => {
+    removeFromOrder(dispatch, product);
+    setIsOpen(false);
+  };
+
   const { state, dispatch } = useContext(Store);
   const { categories, loading, error } = state.categoryList;
   const {
@@ -28,6 +64,9 @@ export default function OrderScreen() {
     loading: loadingProducts,
     error: errorProducts,
   } = state.productList;
+
+  const { orderItems, itemsCount, totalPrice, taxPrice, orderType } =
+    state.order;
 
   useEffect(() => {
     if (!categories) {
@@ -41,9 +80,69 @@ export default function OrderScreen() {
     setCategoryName(name);
     listProducts(dispatch, categoryName);
   };
-  console.log(categories, products);
+
+  const previewOrderHandler = () => {
+    navigate(`/review`);
+  };
+
   return (
     <Box className={styles.root}>
+      <Dialog
+        maxWidth="sm"
+        fullWidth={true}
+        open={isOpen}
+        onClose={closeHandler}>
+        <DialogTitle className={styles.center}>Add {product.name}</DialogTitle>
+        <Box className={[styles.row, styles.center]}>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={quantity === 1}
+            onClick={(e) => quantity > 1 && setQuantity(quantity - 1)}>
+            <RemoveIcon />
+          </Button>
+          <TextField
+            inputProps={{ className: styles.largeInput }}
+            InputProps={{
+              bar: true,
+              inputProps: {
+                className: styles.largeInput,
+              },
+            }}
+            className={styles.largeNumber}
+            type="number"
+            variant="filled"
+            min={1}
+            value={quantity}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={(e) => setQuantity(quantity + 1)}>
+            <AddIcon />
+          </Button>
+        </Box>
+        <Box className={[styles.row, styles.around]}>
+          <Button
+            onClick={cancelOrRemoveFromOrder}
+            variant="contained"
+            color="primary"
+            size="large"
+            className={styles.largeButton}>
+            {orderItems.find((x) => x.name === product.name)
+              ? "Remove From Order"
+              : "Cancel"}
+          </Button>
+          <Button
+            onClick={addToOrderHandler}
+            variant="contained"
+            color="primary"
+            size="large"
+            className={styles.largeButton}>
+            ADD To Order
+          </Button>
+        </Box>
+      </Dialog>
       <Box className={styles.main}>
         <Grid container>
           <Grid md={2} item>
@@ -85,7 +184,9 @@ export default function OrderScreen() {
               ) : (
                 products.products.map((product) => (
                   <Grid item md={6}>
-                    <Card className={styles.card}>
+                    <Card
+                      className={styles.card}
+                      onClick={() => productClickHandler(product)}>
                       <CardActionArea>
                         <CardMedia
                           component="img"
@@ -124,6 +225,34 @@ export default function OrderScreen() {
             </Grid>
           </Grid>
         </Grid>
+      </Box>
+      <Box>
+        <Box>
+          <Box className={[styles.bordered, styles.space]}>
+            My Order - {orderType} | Tax: ${taxPrice} | Total: ${totalPrice} |
+            Items: {itemsCount}
+          </Box>
+          <Box className={[styles.row, styles.around]}>
+            <Button
+              onClick={() => {
+                clearOrder(dispatch);
+                navigate(`/`);
+              }}
+              variant="contained"
+              color="primary"
+              className={styles.largeButton}>
+              Cancel Order
+            </Button>
+            <Button
+              onClick={previewOrderHandler}
+              variant="contained"
+              color="primary"
+              disabled={orderItems.length === 0}
+              className={styles.largeButton}>
+              Done
+            </Button>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );
