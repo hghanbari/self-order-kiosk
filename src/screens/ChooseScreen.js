@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useContext } from "react";
-import Logo from "../component/Logo";
+import Logo from "../components/Logo";
 import { styles } from "../styles";
 import { Store } from "../Store";
 import { setOrderType } from "../actions";

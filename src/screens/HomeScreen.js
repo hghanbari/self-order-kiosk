@@ -2,7 +2,7 @@ import { Box, CardActionArea, Typography, Card } from "@mui/material";
 import React from "react";
 import { TouchApp } from "@mui/icons-material";
 import { styles } from "../styles";
-import Logo from "../component/Logo";
+import Logo from "../components/Logo";
 import { useNavigate } from "react-router-dom";
 
 export default function HomeScreen() {

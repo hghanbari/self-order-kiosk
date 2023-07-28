@@ -1,7 +1,7 @@
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import React, { useContext, useEffect, useState } from "react";
-import Logo from "../component/Logo";
+import Logo from "../components/Logo";
 import { Store } from "../Store";
 import { styles } from "../styles";
 import { useNavigate } from "react-router-dom";
