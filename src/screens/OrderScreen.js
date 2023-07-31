@@ -84,7 +84,7 @@ export default function OrderScreen() {
   const previewOrderHandler = () => {
     navigate(`/review`);
   };
-
+  console.log(products);
   return (
     <Box className={styles.root}>
       <Dialog

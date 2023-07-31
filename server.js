@@ -1,5 +1,4 @@
 const express = require("express");
-const path = require("path");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const data = require("./data");
@@ -82,6 +81,32 @@ const Order = mongoose.model(
   )
 );
 
+// page admin
+app.get("/api/orders", async (req, res) => {
+  const orders = await Order.find({ isDelivered: false, isCanceled: false });
+  res.send(orders);
+});
+
+//API status change
+app.put("/api/orders/:id", async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  if (order) {
+    if (req.body.action === "ready") {
+      order.isReady = true;
+      order.inProgress = false;
+    } else if (req.body.action === "deliver") {
+      order.isDelivered = true;
+    } else if (req.body.action === "cancel") {
+      order.isCanceled = true;
+    }
+    await order.save();
+
+    res.send({ message: "Done" });
+  } else {
+    req.status(404).message({ message: "Order not found" });
+  }
+});
+
 app.post("/api/orders", async (req, res) => {
   const lastOrder = await Order.find().sort({ number: -1 }).limit(1);
   const lastNumber = lastOrder.length === 0 ? 0 : lastOrder[0].number;
@@ -95,12 +120,6 @@ app.post("/api/orders", async (req, res) => {
   }
   const order = await Order({ ...req.body, number: lastNumber + 1 }).save();
   res.send(order);
-});
-
-app.use(express.static(path.join(__dirname, "/build")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/build/index.html"));
 });
 
 const port = process.env.PORT || 5000;

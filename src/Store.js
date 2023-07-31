@@ -14,11 +14,16 @@ import {
   ORDER_CREATE_REQUEST,
   ORDER_CREATE_SUCCESS,
   ORDER_CREATE_FAIL,
+  ORDER_LIST_REQUEST,
+  ORDER_LIST_FAIL,
+  ORDER_LIST_SUCCESS,
+  SCREEN_SET_WIDTH,
 } from "./constants";
 
 export const Store = createContext();
 
 const initalState = {
+  widthScreen: false,
   categoryList: { loading: true },
   productList: { loading: true },
   order: {
@@ -27,10 +32,17 @@ const initalState = {
     paymentType: "Pay here",
   },
   orderCreate: { loading: true },
+  orderList: { loading: true },
 };
 
 function reducer(state, action) {
   switch (action.type) {
+    // check style page(admin page is set true the rest of page is set false)
+    case SCREEN_SET_WIDTH:
+      return {
+        ...state,
+        widthScreen: true,
+      };
     // check the CATEGORY in page OrderScreen
     case CATEGORY_LIST_REQUEST:
       return { ...state, categoryList: { loading: true } };
@@ -148,7 +160,19 @@ function reducer(state, action) {
         ...state,
         orderCreate: { loading: false, error: action.payload },
       };
-
+    // check list order for AdminScreen
+    case ORDER_LIST_REQUEST:
+      return { ...state, orderList: { loading: true } };
+    case ORDER_LIST_SUCCESS:
+      return {
+        ...state,
+        orderList: { loading: false, orders: action.payload },
+      };
+    case ORDER_LIST_FAIL:
+      return {
+        ...state,
+        orderList: { loading: false, error: action.payload },
+      };
     default:
       return state;
   }

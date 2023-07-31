@@ -1,3 +1,15 @@
+import React, { useContext } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Root } from "./styles";
+import OrderScreen from "./screens/OrderScreen";
+import HomeScreen from "./screens/HomeScreen";
+import ChooseScreen from "./screens/ChooseScreen";
+import ReviewScreen from "./screens/ReviewScreen";
+import SelectPaymentScreen from "./screens/SelectPaymentScreen";
+import PaymentScreen from "./screens/PaymentScreen";
+import CompleteOrderScreen from "./screens/CompleteOrderScreen";
+import AdminScreen from "./screens/AdminScreen";
+import { Store } from "../src/Store";
 import {
   Container,
   CssBaseline,
@@ -5,15 +17,6 @@ import {
   ThemeProvider,
   createTheme,
 } from "@mui/material";
-import HomeScreen from "./screens/HomeScreen";
-import ChooseScreen from "./screens/ChooseScreen";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Root } from "./styles";
-import OrderScreen from "./screens/OrderScreen";
-import ReviewScreen from "./screens/ReviewScreen";
-import SelectPaymentScreen from "./screens/SelectPaymentScreen";
-import PaymentScreen from "./screens/PaymentScreen";
-import CompleteOrderScreen from "./screens/CompleteOrderScreen";
 
 const theme = createTheme({
   typography: {
@@ -37,14 +40,16 @@ const theme = createTheme({
   },
 });
 function App() {
+  const { state } = useContext(Store);
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Container maxWidth="sm">
+        <Container maxWidth={state.widthScreen ? "lg" : "sm"}>
           <Root>
             <Paper>
               <Routes>
+                <Route path="/admin" element={<AdminScreen />} />
                 <Route path="/complete" element={<CompleteOrderScreen />} />
                 <Route path="/payment" element={<PaymentScreen />} />
                 <Route
