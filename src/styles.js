@@ -52,10 +52,11 @@ const cssClasses = {
     width: 250,
   },
   largeInput: {
-    width: "60px!important",
+    // width: "60px!important",
     padding: "0!important",
     fontSize: "35px!important",
     textAlign: "center!important",
+    padding: 0,
   },
   bordered: {
     borderWidth: 2,

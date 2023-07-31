@@ -5,7 +5,9 @@ import { styles } from "../styles";
 import { useNavigate } from "react-router-dom";
 
 export default function PaymentScreen() {
+
   const navigate = useNavigate();
+  
   return (
     <Box className={[styles.root, styles.navy]}>
       <Box className={[styles.main, styles.center]}>

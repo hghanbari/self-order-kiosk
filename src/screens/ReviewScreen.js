@@ -5,7 +5,7 @@ import Logo from "../components/Logo";
 import { useNavigate } from "react-router-dom";
 import { addToOrder, removeFromOrder } from "../actions";
 import { Store } from "../Store";
-import { styles } from "../styles";
+import { Root, styles } from "../styles";
 import {
   Box,
   Button,
@@ -56,59 +56,61 @@ export default function ReviewScreen() {
           fullWidth={true}
           open={isOpen}
           onClose={closeHandler}>
-          <DialogTitle className={styles.center}>
-            Add {product.name}
-          </DialogTitle>
-          <Box className={[styles.row, styles.center]}>
-            <Button
-              variant="contained"
-              color="primary"
-              disabled={quantity === 1}
-              onClick={(e) => quantity > 1 && setQuantity(quantity - 1)}>
-              <RemoveIcon />
-            </Button>
-            <TextField
-              inputProps={{ className: styles.largeInput }}
-              InputProps={{
-                bar: true,
-                inputProps: {
-                  className: styles.largeInput,
-                },
-              }}
-              className={styles.largeNumber}
-              type="number"
-              variant="filled"
-              min={1}
-              value={quantity}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={(e) => setQuantity(quantity + 1)}>
-              <AddIcon />
-            </Button>
-          </Box>
-          <Box className={[styles.row, styles.around]}>
-            <Button
-              onClick={cancelOrRemoveFromOrder}
-              variant="contained"
-              color="primary"
-              size="large"
-              className={styles.largeButton}>
-              {orderItems.find((x) => x.name === product.name)
-                ? "Remove From Order"
-                : "Cancel"}
-            </Button>
+          <Root>
+            <DialogTitle className={styles.center}>
+              Add {product.name}
+            </DialogTitle>
+            <Box className={[styles.row, styles.center]}>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={quantity === 1}
+                onClick={(e) => quantity > 1 && setQuantity(quantity - 1)}>
+                <RemoveIcon />
+              </Button>
+              <TextField
+                inputProps={{ className: styles.largeInput }}
+                InputProps={{
+                  bar: true,
+                  inputProps: {
+                    className: styles.largeInput,
+                  },
+                }}
+                className={styles.largeNumber}
+                type="number"
+                variant="filled"
+                min={1}
+                value={quantity}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={(e) => setQuantity(quantity + 1)}>
+                <AddIcon />
+              </Button>
+            </Box>
+            <Box className={[styles.row, styles.around]}>
+              <Button
+                onClick={cancelOrRemoveFromOrder}
+                variant="contained"
+                color="primary"
+                size="large"
+                className={styles.largeButton}>
+                {orderItems.find((x) => x.name === product.name)
+                  ? "Remove From Order"
+                  : "Cancel"}
+              </Button>
 
-            <Button
-              onClick={addToOrderHandler}
-              variant="contained"
-              color="primary"
-              size="large"
-              className={styles.largeButton}>
-              ADD To Order
-            </Button>
-          </Box>
+              <Button
+                onClick={addToOrderHandler}
+                variant="contained"
+                color="primary"
+                size="large"
+                className={styles.largeButton}>
+                ADD To Order
+              </Button>
+            </Box>
+          </Root>
         </Dialog>
         <Box className={[styles.center, styles.column]}>
           <Logo large></Logo>

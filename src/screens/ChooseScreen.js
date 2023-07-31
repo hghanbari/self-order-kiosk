@@ -15,13 +15,15 @@ import { setOrderType } from "../actions";
 import { useNavigate } from "react-router-dom";
 
 export default function ChooseScreen() {
-  const navigate = useNavigate();
   const { dispatch } = useContext(Store);
+
+  const navigate = useNavigate();
 
   const chooseHandler = (orderType) => {
     setOrderType(dispatch, orderType);
     navigate("/order");
   };
+
   return (
     <Fade in={true}>
       <Box className={[styles.root, styles.navy]}>

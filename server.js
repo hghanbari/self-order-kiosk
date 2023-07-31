@@ -14,6 +14,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true,
 });
 
+//product table
 const Product = mongoose.model(
   "products",
   new mongoose.Schema({
@@ -36,7 +37,7 @@ app.get("/api/products/seed", async (req, res) => {
 app.get("/api/products", async (req, res) => {
   const { category } = req.query;
   const products = await Product.find(category ? { category } : {});
-  res.send({ products });
+  res.send(products);
 });
 
 //Add a new product
@@ -48,6 +49,51 @@ app.post("/api/products", async (req, res) => {
 
 app.get("/api/categories", (req, res) => {
   res.send(data.categories);
+});
+
+// Order teble
+const Order = mongoose.model(
+  "Order",
+  new mongoose.Schema(
+    {
+      number: { type: Number, default: 0 },
+      orderType: String,
+      paymentType: String,
+      isPaid: { type: Boolean, default: false },
+      isReady: { type: Boolean, default: false },
+      inProgress: { type: Boolean, default: true },
+      isCanceled: { type: Boolean, default: false },
+      isDelivered: { type: Boolean, default: false },
+      itemsPrice: Number,
+      taxPrice: Number,
+      totalPrice: Number,
+      orderItems: [
+        {
+          name: String,
+          price: Number,
+          quantity: Number,
+        },
+      ],
+    },
+    {
+      timestamps: true,
+    }
+  )
+);
+
+app.post("/api/orders", async (req, res) => {
+  const lastOrder = await Order.find().sort({ number: -1 }).limit(1);
+  const lastNumber = lastOrder.length === 0 ? 0 : lastOrder[0].number;
+  if (
+    !req.body.orderType ||
+    !req.body.paymentType ||
+    !req.body.orderItems ||
+    req.body.orderItems.length === 0
+  ) {
+    return res.send({ message: "Data is required." });
+  }
+  const order = await Order({ ...req.body, number: lastNumber + 1 }).save();
+  res.send(order);
 });
 
 const port = process.env.PORT || 5000;

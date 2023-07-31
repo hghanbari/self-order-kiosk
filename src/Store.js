@@ -11,6 +11,9 @@ import {
   ORDER_CLEAR,
   ORDER_REMOVE_ITEM,
   ORDER_SET_PAYMENT_TYPE,
+  ORDER_CREATE_REQUEST,
+  ORDER_CREATE_SUCCESS,
+  ORDER_CREATE_FAIL,
 } from "./constants";
 
 export const Store = createContext();
@@ -23,10 +26,12 @@ const initalState = {
     orderItems: [],
     paymentType: "Pay here",
   },
+  orderCreate: { loading: true },
 };
 
 function reducer(state, action) {
   switch (action.type) {
+    // check the CATEGORY in page OrderScreen
     case CATEGORY_LIST_REQUEST:
       return { ...state, categoryList: { loading: true } };
     case CATEGORY_LIST_SUCCESS:
@@ -39,6 +44,8 @@ function reducer(state, action) {
         ...state,
         categoryList: { loading: false, error: action.payload },
       };
+
+    // check the PRODUCT in page OrderScreen
     case PRODUCT_LIST_REQUEST:
       return { ...state, productList: { loading: true } };
     case PRODUCT_LIST_SUCCESS:
@@ -51,6 +58,7 @@ function reducer(state, action) {
         ...state,
         productList: { loading: false, error: action.payload },
       };
+    // check the and set the order in page paymentScreen
     case ORDER_SET_TYPE:
       return {
         ...state,
@@ -61,6 +69,7 @@ function reducer(state, action) {
         ...state,
         order: { ...state.order, paymentType: action.payload },
       };
+    // Add order
     case ORDER_ADD_ITEM: {
       const item = action.payload;
       const existItem = state.order.orderItems.find(
@@ -91,6 +100,7 @@ function reducer(state, action) {
         },
       };
     }
+    // Remove order
     case ORDER_REMOVE_ITEM: {
       const orderItems = state.order.orderItems.filter(
         (x) => x.name !== action.payload.name
@@ -114,7 +124,7 @@ function reducer(state, action) {
         },
       };
     }
-
+    // cancel order
     case ORDER_CLEAR:
       return {
         ...state,
@@ -125,6 +135,20 @@ function reducer(state, action) {
           itemsCount: 0,
         },
       };
+    // check the order in page CompleteOrderScreen
+    case ORDER_CREATE_REQUEST:
+      return { ...state, orderCreate: { loading: true } };
+    case ORDER_CREATE_SUCCESS:
+      return {
+        ...state,
+        orderCreate: { loading: false, newOrder: action.payload },
+      };
+    case ORDER_CREATE_FAIL:
+      return {
+        ...state,
+        orderCreate: { loading: false, error: action.payload },
+      };
+
     default:
       return state;
   }
