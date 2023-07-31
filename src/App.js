@@ -17,6 +17,7 @@ import {
   ThemeProvider,
   createTheme,
 } from "@mui/material";
+import QueueScreen from "./screens/QueueScreen";
 
 const theme = createTheme({
   typography: {
@@ -49,17 +50,18 @@ function App() {
           <Root>
             <Paper>
               <Routes>
+                <Route path="/queue" element={<QueueScreen />} />
                 <Route path="/admin" element={<AdminScreen />} />
                 <Route path="/complete" element={<CompleteOrderScreen />} />
                 <Route path="/payment" element={<PaymentScreen />} />
-                <Route
-                  path="/select-payment"
-                  element={<SelectPaymentScreen />}
-                />
                 <Route path="/review" element={<ReviewScreen />} />
                 <Route path="/order" element={<OrderScreen />} />
                 <Route path="/choose" element={<ChooseScreen />} />
                 <Route path="/" element={<HomeScreen />} />
+                <Route
+                  path="/select-payment"
+                  element={<SelectPaymentScreen />}
+                />
               </Routes>
             </Paper>
           </Root>

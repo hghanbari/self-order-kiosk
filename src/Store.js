@@ -18,21 +18,25 @@ import {
   ORDER_LIST_FAIL,
   ORDER_LIST_SUCCESS,
   SCREEN_SET_WIDTH,
+  ORDER_QUEUE_LIST_REQUEST,
+  ORDER_QUEUE_LIST_SUCCESS,
+  ORDER_QUEUE_LIST_FAIL,
 } from "./constants";
 
 export const Store = createContext();
 
 const initalState = {
   widthScreen: false,
+  queueList: { loading: true },
   categoryList: { loading: true },
   productList: { loading: true },
+  orderCreate: { loading: true },
+  orderList: { loading: true },
   order: {
     orderType: "Eat in",
     orderItems: [],
     paymentType: "Pay here",
   },
-  orderCreate: { loading: true },
-  orderList: { loading: true },
 };
 
 function reducer(state, action) {
@@ -172,6 +176,19 @@ function reducer(state, action) {
       return {
         ...state,
         orderList: { loading: false, error: action.payload },
+      };
+    // check the order is progres or in serves
+    case ORDER_QUEUE_LIST_REQUEST:
+      return { ...state, queueList: { loading: true } };
+    case ORDER_QUEUE_LIST_SUCCESS:
+      return {
+        ...state,
+        queueList: { loading: false, queue: action.payload },
+      };
+    case ORDER_QUEUE_LIST_FAIL:
+      return {
+        ...state,
+        queueList: { loading: false, error: action.payload },
       };
     default:
       return state;
